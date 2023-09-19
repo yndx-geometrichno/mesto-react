@@ -1,19 +1,36 @@
-import React from 'react';
-import {api} from "../utils/Api";
+import React from "react";
+import { api } from "../utils/Api";
+import Card from "./Card";
 
-export default function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
+export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
+  const [userName, setUserName] = React.useState("name");
+  const [userDescription, setUserDescription] = React.useState("about");
+  const [userAvatar, setUserAvatar] = React.useState("avatar");
+  const [cards, setCards] = React.useState({});
   
-  const [userName, setUserName] = React.useState('name');
-  const [userDescription, setUserDescription] = React.useState('about');
-  const [userAvatar, setUserAvatar] = React.useState('avatar');
-
   React.useEffect(() => {
     api.getUserInfo().then((res) => {
       setUserName(res.name);
       setUserDescription(res.about);
       setUserAvatar(res.avatar);
-    })
-  }, [])
+    });
+  }, []);
+  
+  const mapCards = (cards) => {
+    return cards.map((item) => ({
+      id: item._id,
+      name: item.name,
+      link: item.link,
+      ownerId: item.owner._id,
+    }));
+  };
+
+  React.useEffect(() => {
+    api.getInitialCards().then((res) => {
+      const cardArray = Object.values(res);
+      setCards(mapCards(cardArray));
+    });
+  }, []);
 
   return (
     <main className="content">
@@ -52,7 +69,18 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
           ></button>
         </div>
       </section>
-      <section className='cards'></section>
+      <section className="cards">
+        {Array.isArray(cards) && cards.map((item) => (
+          <Card
+            key={item.id}
+            card={item}
+            name={item.name}
+            link={item.link}
+            ownerId={item.ownerId}
+            onCardClick={onCardClick}
+          />
+        ))}
+      </section>
     </main>
-  )
+  );
 }

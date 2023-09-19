@@ -1,8 +1,20 @@
 import React from "react";
 
-export default function PopupWithForm({ name, title, children, isOpen, onClose }) {
+export default function PopupWithForm({
+  name,
+  title,
+  children,
+  isOpen,
+  onClose,
+}) {
   return (
-    <div className={isOpen ? `popup popup_type_${name} popup_opened` : `popup popup_type_${name}`} >
+    <div
+      className={
+        isOpen
+          ? `popup popup_type_${name} popup_opened`
+          : `popup popup_type_${name}`
+      }
+    >
       <div className="popup__container">
         <h2 className="popup__header">{title}</h2>
         <form
