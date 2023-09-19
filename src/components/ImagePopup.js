@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function ImagePopup(props) {
-  console.log(props);
   return (
     <div
       className={
