@@ -25,6 +25,14 @@ export default function PopupWithForm({
           noValidate
         >
           {children}
+          <button
+            type="submit"
+            value="Сохранить"
+            className="popup__save-btn popup__save-btn_type_disabled"
+            disabled
+          >
+            Сохранить
+          </button>
         </form>
         <button
           aria-label="Закрыть"

@@ -2,34 +2,40 @@ import React from "react";
 import { api } from "../utils/Api";
 import Card from "./Card";
 
-export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
+export default function Main({
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+}) {
   const [userName, setUserName] = React.useState("name");
   const [userDescription, setUserDescription] = React.useState("about");
   const [userAvatar, setUserAvatar] = React.useState("avatar");
   const [cards, setCards] = React.useState({});
-  
-  React.useEffect(() => {
-    api.getUserInfo().then((res) => {
-      setUserName(res.name);
-      setUserDescription(res.about);
-      setUserAvatar(res.avatar);
-    });
-  }, []);
-  
-  const mapCards = (cards) => {
-    return cards.map((item) => ({
-      id: item._id,
-      name: item.name,
-      link: item.link,
-      ownerId: item.owner._id,
-    }));
-  };
 
   React.useEffect(() => {
-    api.getInitialCards().then((res) => {
-      const cardArray = Object.values(res);
-      setCards(mapCards(cardArray));
-    });
+    api
+      .getUserInfo()
+      .then((res) => {
+        setUserName(res.name);
+        setUserDescription(res.about);
+        setUserAvatar(res.avatar);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    api
+      .getInitialCards()
+      .then((res) => {
+        const cardArray = Object.values(res);
+        setCards(cardArray);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -70,16 +76,17 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
         </div>
       </section>
       <section className="cards">
-        {Array.isArray(cards) && cards.map((item) => (
-          <Card
-            key={item.id}
-            card={item}
-            name={item.name}
-            link={item.link}
-            ownerId={item.ownerId}
-            onCardClick={onCardClick}
-          />
-        ))}
+        {Array.isArray(cards) &&
+          cards.map((item) => (
+            <Card
+              key={item._id}
+              card={item}
+              name={item.name}
+              link={item.link}
+              ownerId={item.owner._id}
+              onCardClick={onCardClick}
+            />
+          ))}
       </section>
     </main>
   );
