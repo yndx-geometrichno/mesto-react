@@ -3,11 +3,9 @@ import React from "react";
 export default function ImagePopup(props) {
   return (
     <div
-      className={
-        props.card.link
-          ? `popup popup_type_photo popup_opened`
-          : `popup popup_type_photo`
-      }
+      className={`popup popup_type_photo ${
+        props.card.link ? "popup_opened" : ""
+      }`}
     >
       <div className="photo-popup">
         <img
