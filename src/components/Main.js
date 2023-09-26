@@ -8,9 +8,10 @@ export default function Main({
   onEditProfile,
   onAddPlace,
   onCardClick,
+  onCardLike
 }) {
   const [cards, setCards] = React.useState({});
-  const userInfo = React.useContext(CurrentUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
 
   React.useEffect(() => {
     api
@@ -30,7 +31,7 @@ export default function Main({
         <div className="profile__container-avatar">
           <img
             className="profile__avatar"
-            src={userInfo.avatar}
+            src={currentUser.avatar}
             alt="Фото профиля"
           />
           <button
@@ -43,7 +44,7 @@ export default function Main({
         <div className="profile__container">
           <div className="profile__container-info">
             <div className="profile__container-name">
-              <h1 className="profile__name">{userInfo.name}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 type="button"
                 className="profile__edit-btn"
@@ -51,7 +52,7 @@ export default function Main({
                 onClick={onEditProfile}
               ></button>
             </div>
-            <p className="profile__about">{userInfo.about}</p>
+            <p className="profile__about">{currentUser.about}</p>
           </div>
           <button
             type="button"
@@ -71,6 +72,8 @@ export default function Main({
               link={item.link}
               ownerId={item.owner._id}
               onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              setCards={setCards}
             />
           ))}
       </section>
