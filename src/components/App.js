@@ -7,6 +7,7 @@ import ImagePopup from "./ImagePopup";
 import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
@@ -15,11 +16,6 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
-
-  // const card = {name: 'test', link: 'https://avatars.mds.yandex.net/get-mpic/4448884/img_id6574022576475682573.jpeg/orig'}
-  // api.addNewCard(card).then((res) => {
-  //   console.log('added', 'res: '+ res);
-  // })
 
   React.useEffect(() => {
     api
@@ -69,10 +65,15 @@ function App() {
   }
 
   function handleUpdateUser(userInfo) {
-    console.log(userInfo)
     api.updateUserInfo(userInfo).then((res) => {
       setCurrentUser(res);
     });
+  }
+
+  function handleUpdateAvatar(userInfo) {
+    api.updateAvatar(userInfo).then((res) => {
+      setCurrentUser(res);
+    })
   }
 
   return (
@@ -126,24 +127,11 @@ function App() {
             <span className="url-input-error popup__error"></span>
           </label>
         </PopupWithForm>
-        <PopupWithForm
-          name="profile-pic-update"
-          title="Обновить аватар"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-        >
-          <label className="popup__input-container">
-            <input
-              id="url-avatar-input"
-              type="url"
-              name="avatar"
-              className="popup__input popup__input_type_url"
-              placeholder="Ссылка на картинку"
-              required
-            />
-            <span className="url-avatar-input-error popup__error"></span>
-          </label>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />
         <PopupWithForm
           name="delete-card-confirmation"
           title="Вы уверены?"

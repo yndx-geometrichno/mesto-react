@@ -13,7 +13,6 @@ export default function EditProfilePopup(props) {
   }, [currentUser]);
 
   function handleNameChange(e) {
-    console.log(e.target.value);
     setName(e.target.value);
   }
 
