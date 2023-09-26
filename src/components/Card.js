@@ -19,9 +19,13 @@ export default function Card(props) {
     props.onCardLike(props.card, props.setCards);
   }
 
+  function handleDeleteCard() {
+    props.onCardDelete(props.card, props.setCards);
+  }
+
   return (
     <article className="card">
-      {isOwn && <button type="button" className="card__delete-btn" />}
+      {isOwn && <button type="button" className="card__delete-btn" onClick={handleDeleteCard} />}
       <img
         className="card__img"
         src={props.link}

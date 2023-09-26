@@ -15,6 +15,11 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
 
+  // const card = {name: 'test', link: 'https://avatars.mds.yandex.net/get-mpic/4448884/img_id6574022576475682573.jpeg/orig'}
+  // api.addNewCard(card).then((res) => {
+  //   console.log('added', 'res: '+ res);
+  // })
+
   React.useEffect(() => {
     api
       .getUserInfo()
@@ -29,8 +34,13 @@ function App() {
   function handleCardLike(card, setCards) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      console.log(newCard)
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+    });
+  }
+
+  function handleCardDelete(card, setCards) {
+    api.deleteCard(card._id).then(() => {
+      setCards((state) => state.filter((c) => c._id !== card._id && c));
     });
   }
 
@@ -68,6 +78,7 @@ function App() {
             onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
           />
           <Footer />
         </div>
