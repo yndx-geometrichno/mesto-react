@@ -31,12 +31,12 @@ class Api {
     }).then(this._getResponse);
   }
 
-  updateUserInfo({ profileName, about }) {
+  updateUserInfo({ name, about }) {
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
-        name: profileName,
+        name: name,
         about: about,
       }),
     }).then(this._getResponse);

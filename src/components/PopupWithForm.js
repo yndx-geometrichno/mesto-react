@@ -6,6 +6,7 @@ export default function PopupWithForm({
   children,
   isOpen,
   onClose,
+  onSubmit
 }) {
   return (
     <div className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}>
@@ -17,13 +18,13 @@ export default function PopupWithForm({
           method="get"
           className="popup__form popup__form-profile"
           noValidate
+          onSubmit={onSubmit}
         >
           {children}
           <button
             type="submit"
             value="Сохранить"
-            className="popup__save-btn popup__save-btn_type_disabled"
-            disabled
+            className="popup__save-btn"
           >
             Сохранить
           </button>

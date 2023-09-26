@@ -6,6 +6,7 @@ import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import EditProfilePopup from "./EditProfilePopup";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
@@ -67,6 +68,13 @@ function App() {
     setSelectedCard({});
   }
 
+  function handleUpdateUser(userInfo) {
+    console.log(userInfo)
+    api.updateUserInfo(userInfo).then((res) => {
+      setCurrentUser(res);
+    });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -82,41 +90,11 @@ function App() {
           />
           <Footer />
         </div>
-        <PopupWithForm
-          name="profile"
-          title="Редактировать профиль"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <>
-            <label className="popup__input-container">
-              <input
-                id="profileName-input"
-                type="text"
-                name="profileName"
-                className="popup__input popup__input_type_profile-name"
-                placeholder="Ваше имя"
-                required
-                minLength="2"
-                maxLength="40"
-              />
-              <span className="profileName-input-error popup__error"></span>
-            </label>
-            <label className="popup__input-container">
-              <input
-                id="about-input"
-                type="text"
-                name="about"
-                className="popup__input popup__input_type_about"
-                placeholder="Ваша профессия"
-                required
-                minLength="2"
-                maxLength="200"
-              />
-              <span className="about-input-error popup__error"></span>
-            </label>
-          </>
-        </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+        />
         <PopupWithForm
           name="card"
           title="Новое место"
