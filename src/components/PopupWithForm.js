@@ -6,7 +6,7 @@ export default function PopupWithForm({
   children,
   isOpen,
   onClose,
-  onSubmit
+  onSubmit,
 }) {
   return (
     <div className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}>
@@ -21,11 +21,7 @@ export default function PopupWithForm({
           onSubmit={onSubmit}
         >
           {children}
-          <button
-            type="submit"
-            value="Сохранить"
-            className="popup__save-btn"
-          >
+          <button type="submit" value="Сохранить" className="popup__save-btn">
             Сохранить
           </button>
         </form>

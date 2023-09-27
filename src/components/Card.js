@@ -16,11 +16,11 @@ export default function Card(props) {
   }
 
   function handleLikeClick() {
-    props.onCardLike(props.card, props.setCards);
+    props.onCardLike(props.card);
   }
 
   function handleDeleteCard() {
-    props.onCardDelete(props.card, props.setCards);
+    props.onCardDelete(props.card);
   }
 
   return (

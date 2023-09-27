@@ -1,5 +1,4 @@
 import React from "react";
-import { api } from "../utils/Api";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -10,21 +9,9 @@ export default function Main({
   onCardClick,
   onCardLike,
   onCardDelete,
+  cards,
 }) {
-  const [cards, setCards] = React.useState({});
   const currentUser = React.useContext(CurrentUserContext);
-
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        const cardArray = Object.values(res);
-        setCards(cardArray);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <main className="content">
@@ -71,10 +58,8 @@ export default function Main({
               card={item}
               name={item.name}
               link={item.link}
-              ownerId={item.owner._id}
               onCardClick={onCardClick}
               onCardLike={onCardLike}
-              setCards={setCards}
               onCardDelete={onCardDelete}
             />
           ))}
