@@ -1,5 +1,6 @@
 import React from "react";
 import { AppContext } from "../contexts/AppContext";
+import usePopupClose from "../hooks/usePopupClose";
 
 export default function PopupWithForm({
   name,
@@ -9,6 +10,7 @@ export default function PopupWithForm({
   onSubmit,
 }) {
   const appContext = React.useContext(AppContext);
+  usePopupClose(isOpen, appContext.closeAllPopups);
 
   return (
     <div className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}>

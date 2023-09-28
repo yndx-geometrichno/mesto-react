@@ -27,20 +27,6 @@ function App() {
     selectedCard.link;
 
   React.useEffect(() => {
-    function closeByEscape(e) {
-      if (e.key === "Escape") {
-        closeAllPopups();
-      }
-    }
-    if (isOpen) {
-      document.addEventListener("keydown", closeByEscape);
-      return () => {
-        document.removeEventListener("keydown", closeByEscape);
-      };
-    }
-  }, [isOpen]);
-
-  React.useEffect(() => {
     api
       .getInitialCards()
       .then((res) => {
