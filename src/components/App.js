@@ -112,6 +112,7 @@ function App() {
   }
 
   function handleUpdateUser(userInfo) {
+    setIsLoading(true);
     api
       .updateUserInfo(userInfo)
       .then((res) => {
@@ -119,10 +120,17 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
   function handleUpdateAvatar(userInfo) {
+    setIsLoading(true);
     api
       .updateAvatar(userInfo)
       .then((res) => {
@@ -130,10 +138,14 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
   function handleAddPlaceSubmit(cardInfo) {
+    setIsLoading(true);
     console.log(cardInfo);
     api
       .addNewCard(cardInfo)
@@ -142,6 +154,9 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -164,31 +179,21 @@ function App() {
           </div>
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
           />
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}
             onSubmitCard={handleAddPlaceSubmit}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
           />
           <PopupWithForm
             name="delete-card-confirmation"
             title="Вы уверены?"
-            onClose={closeAllPopups}
-          >
-            <input
-              type="submit"
-              value="Да"
-              className="popup__save-btn popup__confirm-btn"
-            />
-          </PopupWithForm>
-          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          />
+          <ImagePopup card={selectedCard} />
         </div>
       </CurrentUserContext.Provider>
     </AppContext.Provider>

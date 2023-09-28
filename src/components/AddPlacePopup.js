@@ -1,13 +1,11 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
+import { AppContext } from "../contexts/AppContext";
 
 export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
   const [cardName, setCardName] = React.useState("");
   const [cardLink, setCardLink] = React.useState("");
-
-  // React.useEffect(() => {
-  //   setCardName()
-  // })
+  const appContext = React.useContext(AppContext);
 
   function handleCardNameChange(e) {
     setCardName(e.target.value);
@@ -20,7 +18,7 @@ export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
   function handleSubmit(e) {
     e.preventDefault();
     onSubmitCard({ name: cardName, link: cardLink });
-    onClose();
+    appContext.closeAllPopups();
     e.target.reset();
   }
 
@@ -29,7 +27,6 @@ export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
       name="card"
       title="Новое место"
       isOpen={isOpen}
-      onClose={onClose}
       onSubmit={handleSubmit}
     >
       <label className="popup__input-container">

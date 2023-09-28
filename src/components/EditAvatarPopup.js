@@ -1,8 +1,9 @@
 import React from "react";
-// import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import PopupWithForm from "./PopupWithForm";
+import { AppContext } from "../contexts/AppContext";
 
 export default function EditAvatarPopup(props) {
+  const appContext = React.useContext(AppContext);
   const avatarRef = React.useRef();
 
   function handleSubmit(e) {
@@ -10,7 +11,7 @@ export default function EditAvatarPopup(props) {
     props.onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
-    props.onClose();
+    appContext.closeAllPopups();
     e.target.reset();
   }
 
@@ -19,7 +20,6 @@ export default function EditAvatarPopup(props) {
       name="profile-pic-update"
       title="Обновить аватар"
       isOpen={props.isOpen}
-      onClose={props.onClose}
       onSubmit={handleSubmit}
     >
       <label className="popup__input-container">

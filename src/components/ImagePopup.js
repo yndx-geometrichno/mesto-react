@@ -1,6 +1,10 @@
 import React from "react";
+import { AppContext } from "../contexts/AppContext";
 
 export default function ImagePopup(props) {
+
+  const appContext = React.useContext(AppContext);
+
   return (
     <div
       className={`popup popup_type_photo ${
@@ -18,7 +22,7 @@ export default function ImagePopup(props) {
           aria-label="Закрыть"
           type="button"
           className="photo-popup__close-btn popup__close-btn"
-          onClick={props.onClose}
+          onClick={appContext.closeAllPopups}
         ></button>
       </div>
     </div>
