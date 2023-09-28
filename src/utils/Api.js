@@ -19,68 +19,68 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
+  _request(endpoint, options) {
+    return fetch(`${this._url}${endpoint}`, options).then(this._getResponse);
+  }
+
   getInitialCards() {
-    return fetch(`${this._url}/cards`, {
-      headers: this._headers,
-    }).then(this._getResponse);
+    return this._request(`/cards`, { headers: this._headers });
   }
 
   getUserInfo() {
-    return fetch(`${this._url}/users/me`, {
-      headers: this._headers,
-    }).then(this._getResponse);
+    return this._request(`/users/me`, { headers: this._headers });
   }
 
   updateUserInfo({ name, about }) {
-    return fetch(`${this._url}/users/me`, {
+    return this._request(`/users/me`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
         about: about,
       }),
-    }).then(this._getResponse);
+    });
   }
 
   updateAvatar({ avatar }) {
-    return fetch(`${this._url}/users/me/avatar`, {
+    return this._request(`/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         avatar: avatar,
       }),
-    }).then(this._getResponse);
+    });
   }
 
   addNewCard({ name, link }) {
-    return fetch(`${this._url}/cards`, {
+    return this._request(`/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
         link: link,
       }),
-    }).then(this._getResponse);
+    });
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}`, {
+    return this._request(`/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then(this._getResponse);
+    });
   }
 
   changeLikeCardStatus(cardId, isLiked) {
     if (isLiked) {
-      return fetch(`${this._url}/cards/${cardId}/likes`, {
+      return this._request(`/cards/${cardId}/likes`, {
         method: "PUT",
         headers: this._headers,
-      }).then(this._getResponse);
+      });
     } else {
-      return fetch(`${this._url}/cards/${cardId}/likes`, {
+      return this._request(`/cards/${cardId}/likes`, {
         method: "DELETE",
         headers: this._headers,
-      }).then(this._getResponse);
+      });
     }
   }
 }
