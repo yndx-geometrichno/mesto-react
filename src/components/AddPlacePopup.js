@@ -2,10 +2,15 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 import { AppContext } from "../contexts/AppContext";
 
-export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
+export default function AddPlacePopup({ isOpen, onSubmitCard }) {
   const [cardName, setCardName] = React.useState("");
   const [cardLink, setCardLink] = React.useState("");
   const appContext = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    setCardName('');
+    setCardLink('');
+  }, [isOpen])
 
   function handleCardNameChange(e) {
     setCardName(e.target.value);
@@ -19,7 +24,6 @@ export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
     e.preventDefault();
     onSubmitCard({ name: cardName, link: cardLink });
     appContext.closeAllPopups();
-    e.target.reset();
   }
 
   return (
@@ -39,6 +43,7 @@ export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
           required
           minLength="2"
           maxLength="30"
+          value={cardName}
           onChange={handleCardNameChange}
         />
         <span className="cardName-input-error popup__error"></span>
@@ -51,6 +56,7 @@ export default function AddPlacePopup({ isOpen, onClose, onSubmitCard }) {
           className="popup__input popup__input_type_url"
           placeholder="Ссылка на картинку"
           required
+          value={cardLink}
           onChange={handleCardLinkChange}
         />
         <span className="url-input-error popup__error"></span>
