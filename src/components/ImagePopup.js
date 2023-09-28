@@ -1,9 +1,9 @@
-import React from "react";
+import { useContext } from "react";
 import { AppContext } from "../contexts/AppContext";
 import usePopupClose from "../hooks/usePopupClose";
 
 export default function ImagePopup({ card }) {
-  const appContext = React.useContext(AppContext);
+  const appContext = useContext(AppContext);
   usePopupClose(card?.link, appContext.onClose);
 
   return (

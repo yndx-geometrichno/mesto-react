@@ -1,39 +1,47 @@
-import React from "react";
+import { useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-export default function Card(props) {
-  const currentUser = React.useContext(CurrentUserContext);
+export default function Card({
+  card,
+  name,
+  link,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+}) {
+  const currentUser = useContext(CurrentUserContext);
 
-  const isOwn = props.card.owner._id === currentUser._id;
-  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+  const isOwn = card.owner._id === currentUser._id;
+  const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
   const cardLikeButtonClassName = `card__like-btn ${
     isLiked && "card__like-btn_active"
   }`;
 
   function handleClick() {
-    props.onCardClick(props.card);
+    onCardClick(card);
   }
 
   function handleLikeClick() {
-    props.onCardLike(props.card);
+    onCardLike(card);
   }
 
   function handleDeleteCard() {
-    props.onCardDelete(props.card);
+    onCardDelete(card);
   }
 
   return (
     <article className="card">
-      {isOwn && <button type="button" className="card__delete-btn" onClick={handleDeleteCard} />}
-      <img
-        className="card__img"
-        src={props.link}
-        alt={props.name}
-        onClick={handleClick}
-      />
+      {isOwn && (
+        <button
+          type="button"
+          className="card__delete-btn"
+          onClick={handleDeleteCard}
+        />
+      )}
+      <img className="card__img" src={link} alt={name} onClick={handleClick} />
       <div className="card__info">
-        <h2 className="card__name">{props.name}</h2>
+        <h2 className="card__name">{name}</h2>
         <div className="card__like-container">
           <button
             type="button"
@@ -41,7 +49,7 @@ export default function Card(props) {
             aria-label="Нравится"
             onClick={handleLikeClick}
           ></button>
-          <div className="card__like-counter">{props.card.likes.length}</div>
+          <div className="card__like-counter">{card.likes.length}</div>
         </div>
       </div>
     </article>

@@ -3,9 +3,9 @@ import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 export default function Main({
-  onEditAvatar,
   onEditProfile,
   onAddPlace,
+  onEditAvatar,
   onCardClick,
   onCardLike,
   onCardDelete,
