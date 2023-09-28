@@ -4,7 +4,7 @@ import usePopupClose from "../hooks/usePopupClose";
 
 export default function ImagePopup({ card }) {
   const appContext = React.useContext(AppContext);
-  usePopupClose(card?.link, appContext.closeAllPopups);
+  usePopupClose(card?.link, appContext.onClose);
 
   return (
     <div
@@ -17,7 +17,7 @@ export default function ImagePopup({ card }) {
           aria-label="Закрыть"
           type="button"
           className="photo-popup__close-btn popup__close-btn"
-          onClick={appContext.closeAllPopups}
+          onClick={appContext.onClose}
         ></button>
       </div>
     </div>

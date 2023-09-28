@@ -20,11 +20,6 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
-  const isOpen =
-    isEditAvatarPopupOpen ||
-    isEditProfilePopupOpen ||
-    isAddPlacePopupOpen ||
-    selectedCard.link;
 
   React.useEffect(() => {
     api
@@ -107,9 +102,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {
-        setIsLoading(false);
-      })
+      .then(closeAllPopups)
       .finally(() => {
         setIsLoading(false);
       });
@@ -125,6 +118,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
+      .then(closeAllPopups)
       .finally(() => {
         setIsLoading(false);
       });
@@ -132,7 +126,6 @@ function App() {
 
   function handleAddPlaceSubmit(cardInfo) {
     setIsLoading(true);
-    console.log(cardInfo);
     api
       .addNewCard(cardInfo)
       .then((newCard) => {
@@ -141,13 +134,14 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
+      .then(closeAllPopups)
       .finally(() => {
         setIsLoading(false);
       });
   }
 
   return (
-    <AppContext.Provider value={{ isLoading, closeAllPopups }}>
+    <AppContext.Provider value={{ isLoading, onClose: closeAllPopups }}>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
           <div className="page__container">
@@ -178,6 +172,7 @@ function App() {
           <PopupWithForm
             name="delete-card-confirmation"
             title="Вы уверены?"
+            buttonText={isLoading ? "Удаление..." : "Да"}
           />
           <ImagePopup card={selectedCard} />
         </div>

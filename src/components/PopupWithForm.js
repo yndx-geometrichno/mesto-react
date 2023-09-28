@@ -8,9 +8,10 @@ export default function PopupWithForm({
   children,
   isOpen,
   onSubmit,
+  buttonText,
 }) {
   const appContext = React.useContext(AppContext);
-  usePopupClose(isOpen, appContext.closeAllPopups);
+  usePopupClose(isOpen, appContext.onClose);
 
   return (
     <div className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}>
@@ -19,28 +20,21 @@ export default function PopupWithForm({
         <form
           name={name}
           action="#"
-          method="get"
           className="popup__form popup__form-profile"
-          noValidate
+          // noValidate
           onSubmit={onSubmit}
         >
           {children}
           <button type="submit" value="Сохранить" className="popup__save-btn">
-            {title === "Вы уверены?"
-              ? appContext.isLoading
-                ? "Удаление..."
-                : "Да"
-              : appContext.isLoading
-              ? "Сохранение..."
-              : "Сохранить"}
+            {buttonText}
           </button>
         </form>
         <button
           aria-label="Закрыть"
           type="button"
           className="popup__close-btn"
-          onClick={appContext.closeAllPopups}
-        ></button>
+          onClick={appContext.onClose}
+        />
       </div>
     </div>
   );

@@ -1,26 +1,29 @@
-import React from "react";
+import { useContext, useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 import { AppContext } from "../contexts/AppContext";
 
-export default function EditAvatarPopup(props) {
-  const appContext = React.useContext(AppContext);
-  const avatarRef = React.useRef();
+export default function EditAvatarPopup({ isOpen, onUpdateAvatar }) {
+  const avatarRef = useRef();
+  const appContext = useContext(AppContext);
+
+  useEffect(() => {
+    avatarRef.current.value = "";
+  }, [isOpen]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onUpdateAvatar({
+    onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
-    appContext.closeAllPopups();
-    e.target.reset();
   }
 
   return (
     <PopupWithForm
       name="profile-pic-update"
       title="Обновить аватар"
-      isOpen={props.isOpen}
+      isOpen={isOpen}
       onSubmit={handleSubmit}
+      buttonText={appContext.isLoading ? "Сохранение..." : "Сохранить"}
     >
       <label className="popup__input-container">
         <input

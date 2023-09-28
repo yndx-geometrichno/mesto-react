@@ -1,29 +1,19 @@
-import React from "react";
+import { useContext, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
+import { useForm } from "../hooks/useForm";
 import { AppContext } from "../contexts/AppContext";
 
 export default function AddPlacePopup({ isOpen, onSubmitCard }) {
-  const [cardName, setCardName] = React.useState("");
-  const [cardLink, setCardLink] = React.useState("");
-  const appContext = React.useContext(AppContext);
+  const { values, handleChange, setValues } = useForm({});
+  const appContext = useContext(AppContext);
 
-  React.useEffect(() => {
-    setCardName('');
-    setCardLink('');
-  }, [isOpen])
-
-  function handleCardNameChange(e) {
-    setCardName(e.target.value);
-  }
-
-  function handleCardLinkChange(e) {
-    setCardLink(e.target.value);
-  }
+  useEffect(() => {
+    setValues("");
+  }, [isOpen, setValues]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmitCard({ name: cardName, link: cardLink });
-    appContext.closeAllPopups();
+    onSubmitCard({ name: values.cardName, link: values.url });
   }
 
   return (
@@ -32,6 +22,7 @@ export default function AddPlacePopup({ isOpen, onSubmitCard }) {
       title="Новое место"
       isOpen={isOpen}
       onSubmit={handleSubmit}
+      buttonText={appContext.isLoading ? "Сохранение..." : "Сохранить"}
     >
       <label className="popup__input-container">
         <input
@@ -43,8 +34,8 @@ export default function AddPlacePopup({ isOpen, onSubmitCard }) {
           required
           minLength="2"
           maxLength="30"
-          value={cardName}
-          onChange={handleCardNameChange}
+          value={values.cardName || ""}
+          onChange={handleChange}
         />
         <span className="cardName-input-error popup__error"></span>
       </label>
@@ -56,8 +47,8 @@ export default function AddPlacePopup({ isOpen, onSubmitCard }) {
           className="popup__input popup__input_type_url"
           placeholder="Ссылка на картинку"
           required
-          value={cardLink}
-          onChange={handleCardLinkChange}
+          value={values.url || ""}
+          onChange={handleChange}
         />
         <span className="url-input-error popup__error"></span>
       </label>
