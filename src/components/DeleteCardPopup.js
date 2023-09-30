@@ -4,12 +4,18 @@ import { AppContext } from "../contexts/AppContext";
 
 export default function DeleteCardPopup({ isOpen, onCardDelete }) {
   const appContext = useContext(AppContext);
+
+  function handleSubmit(e) {
+    e.preventDefault(e);
+    onCardDelete();
+  }
+
   return (
     <PopupWithForm
       name="delete-card-confirmation"
       title="Вы уверены?"
       buttonText={appContext.isLoading ? "Удаление..." : "Да"}
-      onSubmit={onCardDelete}
+      onSubmit={handleSubmit}
       isOpen={isOpen}
     />
   );

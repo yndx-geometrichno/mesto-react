@@ -92,7 +92,7 @@ function App() {
     setIsLoading(true);
     request()
       .then(closeAllPopups)
-      .catch(console.err)
+      .catch(console.error)
       .finally(() => {
         setIsLoading(false);
       });

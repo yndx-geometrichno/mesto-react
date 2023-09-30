@@ -8,7 +8,7 @@ export default function AddPlacePopup({ isOpen, onSubmitCard }) {
   const appContext = useContext(AppContext);
 
   useEffect(() => {
-    setValues("");
+    setValues({});
   }, [isOpen, setValues]);
 
   function handleSubmit(e) {
