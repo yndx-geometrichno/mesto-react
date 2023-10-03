@@ -1,42 +1,38 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 import { AppContext } from "../contexts/AppContext";
+import { FormProvider, useForm } from "react-hook-form";
+import { Input } from "./Input";
+import { avatar_validation } from "../utils/inputValidations";
 
 export default function EditAvatarPopup({ isOpen, onUpdateAvatar }) {
-  const avatarRef = useRef();
   const appContext = useContext(AppContext);
 
+  const methods = useForm({ mode: "all" });
+
+  const formState = methods.formState;
+
+  const onSubmit = methods.handleSubmit((data) => {
+    onUpdateAvatar(data);
+  });
+
   useEffect(() => {
-    avatarRef.current.value = "";
+    formState.isSubmitted && methods.reset();
   }, [isOpen]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onUpdateAvatar({
-      avatar: avatarRef.current.value,
-    });
-  }
-
   return (
-    <PopupWithForm
-      name="profile-pic-update"
-      title="Обновить аватар"
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      buttonText={appContext.isLoading ? "Сохранение..." : "Сохранить"}
-    >
-      <label className="popup__input-container">
-        <input
-          id="url-avatar-input"
-          type="url"
-          name="avatar"
-          className="popup__input popup__input_type_url"
-          placeholder="Ссылка на картинку"
-          required
-          ref={avatarRef}
-        />
-        <span className="url-avatar-input-error popup__error"></span>
-      </label>
-    </PopupWithForm>
+    <FormProvider {...methods}>
+      <PopupWithForm
+        name="profile-pic-update"
+        title="Обновить аватар"
+        isOpen={isOpen}
+        onSubmit={(e) => e.preventDefault()}
+        buttonText={appContext.isLoading ? "Сохранение..." : "Сохранить"}
+        isValid={formState.isValid}
+        onClick={onSubmit}
+      >
+        <Input {...avatar_validation} />
+      </PopupWithForm>
+    </FormProvider>
   );
 }

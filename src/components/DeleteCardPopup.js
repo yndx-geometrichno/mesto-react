@@ -6,7 +6,7 @@ export default function DeleteCardPopup({ isOpen, onCardDelete }) {
   const appContext = useContext(AppContext);
 
   function handleSubmit(e) {
-    e.preventDefault(e);
+    e.preventDefault();
     onCardDelete();
   }
 
@@ -17,6 +17,7 @@ export default function DeleteCardPopup({ isOpen, onCardDelete }) {
       buttonText={appContext.isLoading ? "Удаление..." : "Да"}
       onSubmit={handleSubmit}
       isOpen={isOpen}
+      isValid={true}
     />
   );
 }

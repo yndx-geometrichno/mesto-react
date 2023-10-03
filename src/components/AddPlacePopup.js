@@ -1,57 +1,43 @@
 import { useContext, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { useForm } from "../hooks/useForm";
 import { AppContext } from "../contexts/AppContext";
+import { FormProvider, useForm } from "react-hook-form";
+import { Input } from "./Input";
+import { cardName_validation, url_validation } from "../utils/inputValidations";
 
 export default function AddPlacePopup({ isOpen, onSubmitCard }) {
-  const { values, handleChange, setValues } = useForm({});
   const appContext = useContext(AppContext);
 
-  useEffect(() => {
-    setValues({});
-  }, [isOpen, setValues]);
+  const methods = useForm({ mode: "all" });
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onSubmitCard({ name: values.cardName, link: values.url });
-  }
+  const formState = methods.formState;
+
+  const onSubmit = methods.handleSubmit((data) => {
+    onSubmitCard({
+      name: data.cardName,
+      link: data.url,
+    });
+    methods.reset();
+  });
+
+  useEffect(() => {
+    formState.isSubmitted && methods.reset();
+  }, [isOpen]);
 
   return (
-    <PopupWithForm
-      name="card"
-      title="Новое место"
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      buttonText={appContext.isLoading ? "Сохранение..." : "Сохранить"}
-    >
-      <label className="popup__input-container">
-        <input
-          id="cardName-input"
-          type="text"
-          name="cardName"
-          className="popup__input popup__input_type_card-name"
-          placeholder="Название"
-          required
-          minLength="2"
-          maxLength="30"
-          value={values.cardName || ""}
-          onChange={handleChange}
-        />
-        <span className="cardName-input-error popup__error"></span>
-      </label>
-      <label className="popup__input-container">
-        <input
-          id="url-input"
-          type="url"
-          name="url"
-          className="popup__input popup__input_type_url"
-          placeholder="Ссылка на картинку"
-          required
-          value={values.url || ""}
-          onChange={handleChange}
-        />
-        <span className="url-input-error popup__error"></span>
-      </label>
-    </PopupWithForm>
+    <FormProvider {...methods}>
+      <PopupWithForm
+        name="card"
+        title="Новое место"
+        isOpen={isOpen}
+        onSubmit={(e) => e.preventDefault()}
+        buttonText={appContext.isLoading ? "Сохранение..." : "Сохранить"}
+        onClick={onSubmit}
+        isValid={formState.isValid}
+      >
+        <Input {...cardName_validation} />
+        <Input {...url_validation} />
+      </PopupWithForm>
+    </FormProvider>
   );
 }
