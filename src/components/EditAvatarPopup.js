@@ -18,7 +18,7 @@ export default function EditAvatarPopup({ isOpen, onUpdateAvatar }) {
 
   useEffect(() => {
     formState.isSubmitted && methods.reset();
-  }, [isOpen]);
+  }, [isOpen, formState.isSubmitted]);
 
   return (
     <FormProvider {...methods}>

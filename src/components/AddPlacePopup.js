@@ -8,7 +8,7 @@ import { cardName_validation, url_validation } from "../utils/inputValidations";
 export default function AddPlacePopup({ isOpen, onSubmitCard }) {
   const appContext = useContext(AppContext);
 
-  const methods = useForm({ mode: "all" });
+  const methods = useForm({ mode: "onChange" });
 
   const formState = methods.formState;
 
@@ -17,7 +17,6 @@ export default function AddPlacePopup({ isOpen, onSubmitCard }) {
       name: data.cardName,
       link: data.url,
     });
-    methods.reset();
   });
 
   useEffect(() => {

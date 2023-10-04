@@ -7,6 +7,8 @@
 
 @import "./blocks/page/page.css";
 @import "./blocks/page/__container/page__container.css";
+@import "./blocks/page/__loading-container/page__loading-container.css";
+@import "./blocks/page/__loading-animation/page__loading-animation.css";
 
 @import "./blocks/profile/profile.css";
 @import "./blocks/profile/__add-pic-btn/profile__add-pic-btn.css";

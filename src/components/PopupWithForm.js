@@ -34,7 +34,7 @@ export default function PopupWithForm({
               !isValid && "popup__save-btn_type_disabled"
             }`}
             onClick={onClick}
-            disabled={isValid ? false : true}
+            disabled={!isValid}
           >
             {buttonText}
           </button>

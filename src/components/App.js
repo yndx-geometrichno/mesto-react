@@ -10,8 +10,10 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
+import ContentLoading from "./ContentLoading";
 
 function App() {
+  const [isContentLoading, setContentLoading] = useState(true);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -23,27 +25,37 @@ function App() {
   const [cards, setCards] = useState({});
 
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        const cardArray = Object.values(res);
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userInfoFromServer, initialCardsFromServer]) => {
+        setCurrentUser(userInfoFromServer);
+        const cardArray = Object.values(initialCardsFromServer);
         setCards(cardArray);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setContentLoading(false);
       });
   }, []);
 
-  useEffect(() => {
-    api
-      .getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => {
-        console.log(err);
+  function handleSubmit(request) {
+    setIsLoading(true);
+    request()
+      .then(closeAllPopups)
+      .catch(console.error)
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, []);
+  }
+
+  function closeAllPopups() {
+    setEditAvatarPopupOpen(false);
+    setEditProfilePopupOpen(false);
+    setAddPlacePopupOpen(false);
+    setDeleteCardPopupOpen(false);
+    setSelectedCard({});
+  }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -59,59 +71,12 @@ function App() {
       });
   }
 
-  function handleEditAvatarClick() {
-    setEditAvatarPopupOpen(true);
-  }
-
-  function handleEditProfileClick() {
-    setEditProfilePopupOpen(true);
-  }
-
-  function handleAddPlaceClick() {
-    setAddPlacePopupOpen(true);
-  }
-
-  function handleDeleteCardClick(card) {
-    setDeleteCardPopupOpen(true);
-    setCardToDelete(card);
-  }
-
   function handleCardClick(card) {
     setSelectedCard(card);
   }
 
-  function closeAllPopups() {
-    setEditAvatarPopupOpen(false);
-    setEditProfilePopupOpen(false);
-    setAddPlacePopupOpen(false);
-    setDeleteCardPopupOpen(false);
-    setSelectedCard({});
-  }
-
-  function handleSubmit(request) {
-    setIsLoading(true);
-    request()
-      .then(closeAllPopups)
-      .catch(console.error)
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
-
-  function handleProfileSubmit(inputValues) {
-    function makeRequset() {
-      return api.updateUserInfo(inputValues).then(setCurrentUser);
-    }
-
-    handleSubmit(makeRequset);
-  }
-
-  function handleAvatarSubmit(inputValues) {
-    function makeRequest() {
-      return api.updateAvatar(inputValues).then(setCurrentUser);
-    }
-
-    handleSubmit(makeRequest);
+  function handleAddPlaceClick() {
+    setAddPlacePopupOpen(true);
   }
 
   function handleCardSubmit(inputValues) {
@@ -122,6 +87,11 @@ function App() {
     }
 
     handleSubmit(makeRequest);
+  }
+
+  function handleDeleteCardClick(card) {
+    setDeleteCardPopupOpen(true);
+    setCardToDelete(card);
   }
 
   function handleDeleteCardSubmit() {
@@ -136,21 +106,49 @@ function App() {
     handleSubmit(makeRequest);
   }
 
+  function handleEditAvatarClick() {
+    setEditAvatarPopupOpen(true);
+  }
+
+  function handleAvatarSubmit(inputValues) {
+    function makeRequest() {
+      return api.updateAvatar(inputValues).then(setCurrentUser);
+    }
+
+    handleSubmit(makeRequest);
+  }
+
+  function handleEditProfileClick() {
+    setEditProfilePopupOpen(true);
+  }
+
+  function handleProfileSubmit(inputValues) {
+    function makeRequset() {
+      return api.updateUserInfo(inputValues).then(setCurrentUser);
+    }
+
+    handleSubmit(makeRequset);
+  }
+
   return (
     <AppContext.Provider value={{ isLoading, onClose: closeAllPopups }}>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
           <div className="page__container">
             <Header />
-            <Main
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleDeleteCardClick}
-              cards={cards}
-            />
+            {isContentLoading ? (
+              <ContentLoading />
+            ) : (
+              <Main
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleDeleteCardClick}
+                cards={cards}
+              />
+            )}
             <Footer />
           </div>
           <EditProfilePopup
